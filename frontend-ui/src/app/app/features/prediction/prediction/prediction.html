@@ -1,0 +1,16 @@
+<h2>Forecast for Next Year</h2>
+
+<table border="1">
+  <tr>
+    <th>Category</th>
+    <th>Predicted Count</th>
+  </tr>
+
+  <tr *ngFor="let p of predictions">
+    <td>{{ p.category }}</td>
+    <td>{{ p.predicted_next_year }}</td>
+  </tr>
+</table>
+
+<br>
+<button routerLink="/">Back</button>

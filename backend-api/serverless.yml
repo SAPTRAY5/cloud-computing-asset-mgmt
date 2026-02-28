@@ -1,0 +1,25 @@
+service: hello-structure
+
+frameworkVersion: "4"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ap-south-1
+  stage: dev
+  # If you used an AWS profile:
+  # profile: dev
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - httpApi:
+          path: /hello
+          method: GET
+  hello1:
+    handler: handler.hello1
+    events:
+      - httpApi:
+          path: /hello1
+          method: GET

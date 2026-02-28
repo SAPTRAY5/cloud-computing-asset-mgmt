@@ -1,0 +1,22 @@
+# ---------- BUILD STAGE ----------
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+
+# Copy csproj first (for caching)
+COPY AssetManagement.Api/AssetManagement.Api.csproj AssetManagement.Api/
+RUN dotnet restore AssetManagement.Api/AssetManagement.Api.csproj
+
+# Copy everything else
+COPY . .
+
+# Publish
+WORKDIR /src/AssetManagement.Api
+RUN dotnet publish -c Release -o /app/publish
+
+
+# ---------- RUNTIME STAGE ----------
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
+WORKDIR /app
+COPY --from=build /app/publish .
+
+ENTRYPOINT ["dotnet", "AssetManagement.Api.dll"]

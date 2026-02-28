@@ -1,0 +1,26 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+
+# Node
+node_modules/
+dist/
+
+# Environment
+.env
+appsettings.Development.json
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Docker
+docker-compose.override.yml
+
+
+.vs/
+.serverless/

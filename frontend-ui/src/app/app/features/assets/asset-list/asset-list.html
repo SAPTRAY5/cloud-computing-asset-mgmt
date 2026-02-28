@@ -1,0 +1,31 @@
+<h2>Asset Management</h2>
+
+<input [(ngModel)]="filterText" (input)="filter()" placeholder="Filter assets..." />
+
+<input type="file" (change)="onFileSelected($event)" />
+
+<table border="1">
+  <tr>
+    <th>Name</th>
+    <th>Category</th>
+    <th>Date</th>
+    <th>Status</th>
+    <th>Price</th>
+    <th>Actions</th>
+  </tr>
+
+  <tr *ngFor="let asset of filteredAssets">
+    <td><input [(ngModel)]="asset.name" /></td>
+    <td><input [(ngModel)]="asset.category" /></td>
+    <td>{{ asset.purchaseDate | date }}</td>
+    <td><input [(ngModel)]="asset.status" /></td>
+    <td><input [(ngModel)]="asset.price" type="number" /></td>
+    <td>
+      <button (click)="update(asset)">Update</button>
+      <button (click)="delete(asset.id)">Delete</button>
+    </td>
+  </tr>
+</table>
+
+<br>
+<button routerLink="/prediction">See Prediction</button>

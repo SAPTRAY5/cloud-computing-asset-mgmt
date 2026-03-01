@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: asset-api
-        image: yourdockerhub/asset-api:latest
+        image: macroray/cloud_computing_asset_mgmt-backend-api:latest
         ports:
         - containerPort: 8080

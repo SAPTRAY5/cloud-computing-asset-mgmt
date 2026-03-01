@@ -3,6 +3,8 @@ using AssetManagement.Api.Data;
 using AssetManagement.Api.Models;
 using OfficeOpenXml;
 using Microsoft.EntityFrameworkCore;
+using CsvHelper;
+using System.Globalization;
 
 namespace AssetManagement.Api.Controllers
 {
@@ -17,41 +19,42 @@ namespace AssetManagement.Api.Controllers
             _context = context;
         }
 
-        [HttpPost("upload")]
-        public async Task<IActionResult> UploadExcel(IFormFile file)
+         [HttpPost("upload-csv")]
+        public async Task<IActionResult> UploadCsv(IFormFile file)
         {
             if (file == null || file.Length == 0)
-                return BadRequest("Invalid file.");
+                return BadRequest("CSV file is empty or missing.");
 
-            using var stream = new MemoryStream();
-            await file.CopyToAsync(stream);
-
-            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-
-            using var package = new ExcelPackage(stream);
-            var worksheet = package.Workbook.Worksheets[0];
-
-            int rowCount = worksheet.Dimension.Rows;
-
-            for (int row = 2; row <= rowCount; row++)
+            try
             {
-                var asset = new Asset
+                using var stream = file.OpenReadStream();
+                using var reader = new StreamReader(stream);
+                using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+                var records = new List<Asset>();
+                await foreach (var record in csv.GetRecordsAsync<Asset>())
                 {
-                    Name = worksheet.Cells[row, 2].Text,
-                    Category = worksheet.Cells[row, 3].Text,
-                    PurchaseDate = DateTime.Parse(worksheet.Cells[row, 4].Text),
-                    Status = worksheet.Cells[row, 5].Text,
-                    Price = double.Parse(worksheet.Cells[row, 6].Text)
-                };
+                    record.Id = 0; // Reset ID so PostgreSQL generates it
+                     record.PurchaseDate = DateTime.SpecifyKind(record.PurchaseDate, DateTimeKind.Utc);
 
-                _context.Assets.Add(asset);
+                    records.Add(record);
+                }
+
+                // Save to DB
+                await _context.Assets.AddRangeAsync(records);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "CSV uploaded and saved successfully", count = records.Count });
             }
-
-            await _context.SaveChangesAsync();
-
-            return Ok("Data inserted successfully.");
+            catch (DbUpdateException dbEx)
+            {
+                return BadRequest($"Database error: {dbEx.InnerException?.Message ?? dbEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error parsing CSV: {ex.Message}");
+            }
         }
-
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {

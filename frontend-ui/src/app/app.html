@@ -12,25 +12,28 @@
 
   <div class="button-row">
     <div class="file-upload">
-  <input 
-    type="file" 
-    id="fileInput"
-    hidden
-    (change)="onFileSelected($event)"
-    accept=".csv">
 
-  <button 
-    mat-stroked-button 
-    color="primary"
-    (click)="fileInput.click()"
-    #fileInput>
-    Choose CSV File
-  </button>
+      <!-- Hidden File Input -->
+      <input 
+        #fileInput
+        type="file" 
+        hidden
+        accept=".csv"
+        (change)="onFileSelected($event)">
 
-  <span class="file-name" *ngIf="selectedFileName">
-    {{ selectedFileName }}
-  </span>
-</div>
+      <!-- Button triggers file input -->
+      <button 
+        mat-stroked-button 
+        color="primary"
+        (click)="fileInput.click()">
+        Choose CSV File
+      </button>
+
+      <span class="file-name" *ngIf="selectedFileName">
+        {{ selectedFileName }}
+      </span>
+    </div>
+
     <button mat-raised-button color="primary" (click)="uploadCsv()">
       Upload CSV
     </button>
@@ -39,6 +42,7 @@
       Load Assets
     </button>
   </div>
+
   <mat-card *ngIf="assets.length > 0" class="table-card">
 
     <div class="table-wrapper">
@@ -50,7 +54,7 @@
             <th>Category</th>
             <th>Purchase Date</th>
             <th>Status</th>
-            <th>Price(in Rupees)</th>
+            <th>Price (in Rupees)</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -58,19 +62,21 @@
         <tbody>
           <tr 
             *ngFor="let asset of assets; trackBy: trackById"
-            [class.editing-row]="editingId === asset.id"
-          >
+            [class.editing-row]="editingId === asset.id">
 
+            <!-- VIEW MODE -->
             <ng-container *ngIf="editingId !== asset.id; else editRow">
 
               <td>{{ asset.name }}</td>
               <td>{{ asset.category }}</td>
               <td>{{ asset.purchaseDate | date:'yyyy-MM-dd' }}</td>
-             <td>
+
+              <td>
                 <span class="status" [ngClass]="asset.status.toLowerCase()">
                   {{ asset.status }}
                 </span>
-             </td>
+              </td>
+
               <td>{{ asset.price }}</td>
 
               <td>

@@ -55,7 +55,7 @@ namespace AssetManagement.Api.Controllers
                 return BadRequest($"Error parsing CSV: {ex.Message}");
             }
         }
-        [HttpGet]
+        [HttpGet("get-all")]
         public async Task<IActionResult> GetAll()
         {
             var assets = await _context.Assets.ToListAsync();
@@ -86,7 +86,7 @@ namespace AssetManagement.Api.Controllers
             return Ok(await query.ToListAsync());
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> Create(Asset asset)
         {
             _context.Assets.Add(asset);

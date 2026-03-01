@@ -1,0 +1,153 @@
+<div class="header">
+  <div class="header-left">
+    <div class="logo-circle">A</div>
+    <div>
+      <h1>Asset Management</h1>
+      <p>Manage and track company assets</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="button-row">
+    <div class="file-upload">
+  <input 
+    type="file" 
+    id="fileInput"
+    hidden
+    (change)="onFileSelected($event)"
+    accept=".csv">
+
+  <button 
+    mat-stroked-button 
+    color="primary"
+    (click)="fileInput.click()"
+    #fileInput>
+    Choose CSV File
+  </button>
+
+  <span class="file-name" *ngIf="selectedFileName">
+    {{ selectedFileName }}
+  </span>
+</div>
+    <button mat-raised-button color="primary" (click)="uploadCsv()">
+      Upload CSV
+    </button>
+
+    <button mat-raised-button color="primary" (click)="loadAssets()">
+      Load Assets
+    </button>
+  </div>
+  <mat-card *ngIf="assets.length > 0" class="table-card">
+
+    <div class="table-wrapper">
+      <table class="custom-table">
+
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Purchase Date</th>
+            <th>Status</th>
+            <th>Price(in Rupees)</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr 
+            *ngFor="let asset of assets; trackBy: trackById"
+            [class.editing-row]="editingId === asset.id"
+          >
+
+            <ng-container *ngIf="editingId !== asset.id; else editRow">
+
+              <td>{{ asset.name }}</td>
+              <td>{{ asset.category }}</td>
+              <td>{{ asset.purchaseDate | date:'yyyy-MM-dd' }}</td>
+             <td>
+                <span class="status" [ngClass]="asset.status.toLowerCase()">
+                  {{ asset.status }}
+                </span>
+             </td>
+              <td>{{ asset.price }}</td>
+
+              <td>
+                <button 
+                  mat-icon-button 
+                  color="primary"
+                  (click)="editAsset(asset)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+
+                <button 
+                  mat-icon-button 
+                  color="warn"
+                  (click)="deleteAsset(asset.id)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+
+            </ng-container>
+
+            <!-- EDIT MODE -->
+            <ng-template #editRow>
+
+              <td>
+                <mat-form-field appearance="outline">
+                  <input matInput [(ngModel)]="editableAsset!.name">
+                </mat-form-field>
+              </td>
+
+              <td>
+                <mat-form-field appearance="outline">
+                  <input matInput [(ngModel)]="editableAsset!.category">
+                </mat-form-field>
+              </td>
+
+              <td>
+                <mat-form-field appearance="outline">
+                  <input matInput type="date" [(ngModel)]="editableAsset!.purchaseDate">
+                </mat-form-field>
+              </td>
+
+              <td>
+                <mat-form-field appearance="outline">
+                  <input matInput [(ngModel)]="editableAsset!.status">
+                </mat-form-field>
+              </td>
+
+              <td>
+                <mat-form-field appearance="outline">
+                  <input matInput type="number" [(ngModel)]="editableAsset!.price">
+                </mat-form-field>
+              </td>
+
+              <td>
+                <button 
+                  mat-raised-button 
+                  color="primary"
+                  (click)="saveInlineUpdate()">
+                  Save
+                </button>
+
+                <button 
+                  mat-stroked-button
+                  color="warn"
+                  (click)="cancelEdit()">
+                  Cancel
+                </button>
+              </td>
+
+            </ng-template>
+
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+
+  </mat-card>
+
+</div>

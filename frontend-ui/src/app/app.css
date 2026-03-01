@@ -1,0 +1,110 @@
+.container {
+  padding: 24px;
+}
+
+.button-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px; /* 👈 Adds space before table */
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.custom-table thead {
+  background: #f9fafb;
+}
+
+.custom-table th {
+  text-align: left;
+  padding: 18px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.custom-table td {
+  padding: 18px 24px;
+  font-size: 14px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+}
+
+/* Row hover */
+.custom-table tbody tr:hover {
+  background: #f8fbff;
+  transition: 0.2s ease;
+}
+
+/* Right align price */
+.custom-table th:nth-child(5),
+.custom-table td:nth-child(5) {
+  text-align: right;
+}
+
+/* Center actions */
+.custom-table th:last-child,
+.custom-table td:last-child {
+  text-align: center;
+}
+
+button[mat-raised-button] {
+  border-radius: 24px;
+  padding: 0 20px;
+  font-weight: 500;
+}
+
+.header {
+  background: linear-gradient(135deg, #1976d2, #42a5f5);
+  padding: 28px 40px;
+  color: white;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.header p {
+  margin: 2px 0 0;
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.file-upload {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.file-name {
+  font-size: 13px;
+  color: #555;
+  font-weight: 500;
+}
